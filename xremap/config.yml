@@ -1,0 +1,31 @@
+modmap:
+  - name: Caps to fake Hyper and Escape
+    remap:
+      CapsLock:
+        held: [Ctrl_L, Super_L, Alt_L]
+        alone: esc
+        alone_timeout_millis: 100
+
+keymap:
+  - name: Main keybindings
+    remap:
+      C-M-Super-j: Shift-8
+      C-M-Super-k: Shift-9
+      C-M-Super-u: Alt_R-7
+      C-M-Super-i: Alt_R-0
+      C-M-Super-m: Alt_R-8
+      C-M-Super-KEY_COMMA: Alt_R-9
+
+      C-M-Super-l: Shift-7
+      C-M-Super-KEY_SEMICOLON: Alt_R-KEY_MINUS
+      C-M-Super-d: Alt_R-4
+      C-M-Super-a: Shift-6
+      C-M-Super-s: Shift-5
+      C-M-Super-f: Shift-KEY_MINUS
+
+  - name: Browser-specific Ctrl-J/K remap
+    application:
+      only: ["brave-browser", "librewolf", ".protonvpn-app-wrapped"]
+    remap:
+      C-j: down
+      C-k: up

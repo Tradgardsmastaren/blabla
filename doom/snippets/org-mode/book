@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: Book
+# uuid:
+# key: book
+# condition: t
+# --
+* ${1:Title}
+  :PROPERTIES:
+  :author: ${2:Author}
+  :status: ${3:Planned}
+  :rating:
+  :date_started: ${4:`(format-time-string "%Y-%m-%d")`}
+  :date_finished:
+  :isbn:
+  :genres: ${5:Fantasy}
+  :language: ${6:English}
+  :original_language: ${7:English}
+  :END:
+  $0

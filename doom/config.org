@@ -1,0 +1,127 @@
+#+title: Config
+#+STARTUP: content
+
+
+* Appearence
+
+** Fonts
+#+begin_src emacs-lisp
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;;   presentations or streaming.
+;; - `doom-symbol-font' -- for symbols
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
+
+(setq! doom-font (font-spec :family "RobotoMono Nerd Font" :size 16 :weight 'light)
+       doom-variable-pitch-font (font-spec :family "Cantarell" :size 16 :weight 'regular)
+                                        ;doom-serif-font (font-spec :family "Cantarell" :size 16 :weight 'bold)
+                                        ;doom-unicode-font-(font-spec :family "Cantarell" :size 16 :weight 'bold)
+       doom-big-font (font-spec :family "JetBrainsMono Nerd Font Mono" :size 24 :weight 'normal))
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
+(custom-set-faces!
+  '(font-lock-string-face :slant italic))
+#+end_src
+** Theme
+
+#+begin_src emacs-lisp
+(defun synchronize-theme ()
+  (let* ((light-theme 'doom-nano-light)
+         (dark-theme 'doom-nano-dark)
+         (start-time-light-theme 6)
+         (end-time-light-theme 18)
+         (hour (string-to-number (substring (current-time-string) 11 13)))
+         (next-theme (if (member hour (number-sequence start-time-light-theme end-time-light-theme))
+                         light-theme dark-theme)))
+    (when (not (equal doom-theme next-theme))
+      (setq doom-theme next-theme)
+      (load-theme next-theme))))
+
+(run-with-timer 0 900 'synchronize-theme)
+;;(setq! doom-theme 'modus-operandi)
+;;(setq! catppuccin-flavor 'macchiato) ;; ['latte 'frappe  'macchiato  'mocha ]
+#+end_src
+
+** Margins
+#+begin_src emacs-lisp
+;; Margins from NANO Emacs
+(setq default-frame-alist
+      '((height . 44) (width  . 81) (left-fringe . 0) (right-fringe . 0)
+        (internal-border-width . 32) (vertical-scroll-bars . nil)
+        (bottom-divider-width . 0) (right-divider-width . 0)
+        (undecorated-round . t)))
+(modify-frame-parameters nil default-frame-alist)
+(setq-default pop-up-windows nil)
+#+end_src
+** Modeline
+#+begin_src emacs-lisp
+;; Display time in modeline
+(display-time-mode t)
+;; NANO Emacs modeline
+(use-package! doom-nano-modeline
+  :config
+  (doom-nano-modeline-mode 1)
+  (global-hide-mode-line-mode 1))
+#+end_src
+
+
+* Settings
+#+begin_src emacs-lisp
+;; Some functionality uses this to identify you, e.g. GPG configuration, email
+;; clients, file templates and snippets. It is optional.
+;; (setq user-full-name "John Doe"
+;;       user-mail-address "john@doe.com")
+
+;; Move to trash
+(setq-default delete-by-moving-to-trash t)
+;;
+(setq!
+ ;; Margin on top and bottom, scrollof
+ scroll-margin 8
+ ;; No fucking AM/PM in my house
+ display-time-24hr-format t
+ ;; Smaller increments for undo
+ evil-want-fine-undo t
+ ;; I /WILL/ forget sometimes
+ auto-save-default t
+ ;; Bloat /s
+ display-time-default-load-average nil
+ ;; Line numbers
+ display-line-numbers-type 'relative
+ ;; Swap /g in search and replace
+ evil-ex-substitute-global t)
+
+;; w motion through camelCase words
+(global-subword-mode t)
+#+end_src
+* Org
+#+begin_src emacs-lisp
+(setq! org-directory "~/org/")
+
+#+end_src
+* Completion
+#+begin_src emacs-lisp
+;;; -*- lexical-binding: t; -*-
+(setq! corfu-preselect 'prompt)
+(setq! +corfu-want-tab-prefer-expand-snippets t)
+(setq! corfu-auto-delay 0.2) ; This may be costly, tune if performance dips
+#+end_src
+* Random plugins
+** Affe
+Basically fzf in emacs
+#+begin_src emacs-lisp
+(setq! affe-find-command  "rg --hidden --color=never --files")
+#+end_src
+
+* Keybinds
+#+begin_src emacs-lisp
+(map! :nv   "ö" #'evil-ex                         ; ö to :
+      :leader :nv "ö" #'execute-extended-command  ; SPC ö to M-x
+      :leader :nv "s f" #'affe-find              ; fzf
+      :leader :nv "s h" (lambda () (interactive) (affe-find "~/"))
+      )
+#+end_src
