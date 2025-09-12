@@ -7,6 +7,7 @@
 #  export EDITOR='vim'
 #else
 export EDITOR='nvim'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 bindkey -v # vim mode
 bindkey '^K' up-line-or-history # Ctrl + K → up in history
